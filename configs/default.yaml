@@ -1,0 +1,45 @@
+data:
+  context_window: 60          # Transformer输入的天数
+  lookback_for_norm: 60       # 归一化用的历史窗口
+  train_years: [2015, 2022]
+  val_year: 2023
+  test_year: 2024
+
+model:
+  cnn:
+    day_out_dim: 20
+    week_out_dim: 64
+    month_out_dim: 128
+    week_kernel: 5
+    month_kernel: 20
+  financial:
+    input_dim: 8
+    output_dim: 32
+  transformer:
+    d_model: 256
+    nhead: 8
+    num_layers: 4
+    dropout: 0.1
+    dim_feedforward: 512
+  actor_critic:
+    hidden_dim: 128
+    n_actions: 3              # buy / sell / hold
+
+env:
+  initial_capital: 1_000_000
+  transaction_cost: 0.001
+  slippage: 0.001
+  max_drawdown_penalty: 0.05  # 超过5%回撤开始惩罚
+
+ppo:
+  learning_rate: 3e-4
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  total_timesteps: 1_000_000
